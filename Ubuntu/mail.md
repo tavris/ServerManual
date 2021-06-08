@@ -37,7 +37,14 @@
     ```
 
 # Mail Server
+## SMTP
 
+```
 $ su -
-
 $ apt-get install postfix
+```
+
+## POP3, IMAP
+
+```
+```
