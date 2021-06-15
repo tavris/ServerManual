@@ -38,13 +38,93 @@
 
 # Mail Server
 ## SMTP
-
+### Install
 ```
 $ su -
 $ apt-get install postfix
 ```
+### Configure
+- /etc/postfix/main.cf
+```
+mydomain = {domain}
+myhostname = mail.{domain}
+myorigin = $mydomain
+mydestination = $myhostname, $mydomain, localhost.$mydomain, localhost
+
+mtpd_tls_cert_file = {SSL_CERT_FILE}
+smtpd_tls_key_file = {SSL_KEY_FILE}
+
+# Mail to be forwarded when email does not exist.
+luser_relay = {email}
+```
 
 ## POP3, IMAP
-
+### Install
 ```
+$ su -
+$ apt-get install dovecot
+```
+### Configure
+- /etc/dovecot/conf.d/10-auth.conf
+```
+disable_plaintext_auth = yes
+auth_mechanisms = plain login
+
+##
+## Password and user databases
+##
+#!include auth-deny.conf.ext
+#!include auth-master.conf.ext
+
+#!include auth-system.conf.ext
+#!include auth-sql.conf.ext
+#!include auth-ldap.conf.ext
+!include auth-passwdfile.conf.ext
+#!include auth-checkpassword.conf.ext
+#!include auth-vpopmail.conf.ext
+#!include auth-static.conf.ext
+```
+
+- /etc/dovecot/conf.d/10-mail.conf
+```
+mail_location = maildir:/var/mail/%u/
+
+namespace inbox {
+  inbox = yes
+}
+
+mail_privileged_group = {GROUP}
+```
+
+- /etc/dovecot/conf.d/10-master.conf
+```
+service lmtp {
+  unix_listener /var/spool/postfix/private/dovecot-lmtp {
+    mode = 0600
+    user = postfix
+    group = postfix
+  }
+}
+```
+
+- /etc/dovecot/conf.d/10-ssl.conf
+```
+ssl = yes
+
+ssl_cert = <{SSL_CERT_FILE}
+ssl_key = <{SSL_KEY_FILE}
+ssl_ca = <{SSL_CA_FILE}
+```
+
+- /etc/dovecot/conf.d/auth-passwdfile.conf.ext
+```
+passdb {
+  driver = passwd-file
+  args = scheme=PLAIN username_format=%u /etc/dovecot/users
+}
+
+userdb {
+  driver = passwd-file
+  args = username_format=%u /etc/dovecot/users
+}
 ```
