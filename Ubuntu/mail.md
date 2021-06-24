@@ -1,5 +1,8 @@
 # DNS Setting
 
+## Environment
+- OS : Linux 18.04.5 LTS
+
 ## Record Setting
 
 - **A Record**
@@ -131,5 +134,12 @@ $ apt-get install dovecot
 
 # Testing
 ## 
+
+# Using
+## Add Email User
+- /etc/dovecot/users
+  ```
+  {Id}:{Password}:{uid}:{gid}::::userdb_mail={Path}
+  ```
 
 # Trouble Shooting
