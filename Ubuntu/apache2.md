@@ -4,7 +4,7 @@
 
 ## Install
 ```
-su -
-apt-get update
-apt-get upgrade
+$ su -
+$ apt-get update
+$ apt-get upgrade
 ```
