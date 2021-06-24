@@ -1,10 +1,9 @@
-# DNS Setting
-
+# Postfix & Dovecot mail server
 ## Environment
 - OS : Linux 18.04.5 LTS
 
-## Record Setting
-
+## DNS Setting
+### Record Setting
 - **A Record**
   - A NAME : mail.{domain}, VALUE : {Server IP}
   - Test<br>
@@ -39,14 +38,14 @@
     {domain}  text = v=spf1 ip4:{Server IP} -all
     ```
 
-# Mail Server
-## SMTP
-### Install
+## Mail Server
+### SMTP
+#### Install
 ```
 $ su -
 $ apt-get install postfix
 ```
-### Configure
+#### Configure
 - /etc/postfix/main.cf
   ```
   mydomain = {domain}
@@ -61,13 +60,13 @@ $ apt-get install postfix
   luser_relay = {email}
   ```
 
-## POP3, IMAP
-### Install
+### POP3, IMAP
+#### Install
 ```
 $ su -
 $ apt-get install dovecot
 ```
-### Configure
+#### Configure
 - /etc/dovecot/conf.d/10-auth.conf
   ```
   disable_plaintext_auth = yes
@@ -132,14 +131,13 @@ $ apt-get install dovecot
   }
   ```
 
-# Testing
-## 
+## Testing 
 
-# Using
-## Add Email User
+## Using
+### Add Email User
 - /etc/dovecot/users
   ```
   {Id}:{Password}:{uid}:{gid}::::userdb_mail={Path}
   ```
 
-# Trouble Shooting
+## Trouble Shooting
