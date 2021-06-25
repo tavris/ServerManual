@@ -1,6 +1,6 @@
 # MySQL
 ### Environment
-- OS : Linux 18.04.5 LTS
+- ![Generic badge](https://img.shields.io/badge/UbuntU-18.04_or_Above-green.svg)
 
 ## Install
 ```
