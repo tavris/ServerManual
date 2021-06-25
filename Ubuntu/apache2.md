@@ -26,6 +26,10 @@ LogLevel warn
 AccessFileName .htaccess
 ```
 
+## Default conf file
+- sites-avaliable/default.conf [default.conf](./samples/apache2/default.conf)
+- sites-avaliable/default-ssl.conf [default-ssl.conf](./samples/apache2/default-ssl.conf)
+
 ## Related Service
 - SQL
   - [MySQL](./MySQL.md)
