@@ -11,7 +11,19 @@ $ apt-get install apache2
 ```
 
 ## Setting
+- /etc/apache2/apache2.conf
 ```
+HostnameLookups Off
+
+LogLevel warn
+
+#<Directory /var/www/>
+#    Options Indexes FollowSymLinks
+#    AllowOverride None
+#    Require all granted
+#</Directory>
+
+AccessFileName .htaccess
 ```
 
 ## Related Service
