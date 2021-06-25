@@ -27,8 +27,8 @@ AccessFileName .htaccess
 ```
 
 ## Default conf file
-- (Apache2 dir)/sites-avaliable/default.conf [default.conf](./samples/apache2/default.conf)
-- (Apache2 dir)/sites-avaliable/default-ssl.conf [default-ssl.conf](./samples/apache2/default-ssl.conf)
+- {Apache2 dir}/sites-avaliable/default.conf [default.conf](./samples/apache2/default.conf)
+- {Apache2 dir}/sites-avaliable/default-ssl.conf [default-ssl.conf](./samples/apache2/default-ssl.conf)
 
 ## Related Service
 - SQL
