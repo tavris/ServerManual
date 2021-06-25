@@ -1,7 +1,7 @@
 # PHP
 ### Environment
-- OS : Linux 18.04.5 LTS
-- PHP : 
+- ![Generic badge](https://img.shields.io/badge/UbuntU-18.04_or_Above-green.svg)
+- ![Generic badge](https://img.shields.io/badge/PHP-7.0,_7.2_or_Above-blue.svg)
 
 ## Install
 ```
