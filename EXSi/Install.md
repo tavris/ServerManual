@@ -1,7 +1,7 @@
 # VMware vSphere Hypervisor
 ### Environment
 ![Generic badge](https://img.shields.io/badge/vSphere_Hypervisor(EXSi)-7.0-green.svg)
-![Generic badge](https://img.shields.io/badge/Chipset-SuperMicro_C621-green.svg)
+![Generic badge](https://img.shields.io/badge/Chipset-SuperMicro_C621,_ASRock_X470D4U-blue.svg)
 
 ### EXSi 7.0 Hardware Requirements
    - At least two CPU cores.
