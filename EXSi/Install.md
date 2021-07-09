@@ -24,6 +24,9 @@
       runweasel cdromBoot autoPartitionOSDataSize={Size of MB}
       ```
     - If more command need, see the [EXSi Boot Options](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.esxi.upgrade.doc/GUID-9040F0B2-31B5-406C-9000-B02E8DA785D4.html#GUID-9040F0B2-31B5-406C-9000-B02E8DA785D4)
+  
+  - Step.2 Configure
+    - Management Network
 
 ## Port
   - EXSi all port list, see [Port requirements for ESXi](https://kb.vmware.com/s/article/2039095)
