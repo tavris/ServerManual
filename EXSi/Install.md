@@ -1,7 +1,7 @@
 # VMware vSphere Hypervisor
 ### Environment
-   - vSphere Hypervisor 7 (EXSi 7.0)
-   - SuperMicro C621 Chipset
+![Generic badge](https://img.shields.io/badge/vSphere_Hypervisor(EXSi)-7.0-green.svg)
+![Generic badge](https://img.shields.io/badge/Chipset-SuperMicro_C621-green.svg)
 
 ### EXSi 7.0 Hardware Requirements
    - At least two CPU cores.
