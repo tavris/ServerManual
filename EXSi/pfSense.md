@@ -6,8 +6,13 @@
 ## Install
   - Download pfSense : [pfSense 2.5.2](https://www.pfsense.org/download/)
 
-## Setup 
+## Setup
 
 ## Configure
+- ### Firewall
+
+- ### ACME
+
+- ### HAProxy
 
 ## Troubleshooting
