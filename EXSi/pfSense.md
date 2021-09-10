@@ -10,6 +10,9 @@
 
 ## Configure
 - ### Firewall
+  - #### NAT
+    - SSH(Port 22)
+      
 
 - ### ACME
 
