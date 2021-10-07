@@ -39,6 +39,11 @@
     ```
 
 ## Mail Server
+### Port List
+  - SMTP : TCP 25
+  - POP3 : TCP 110
+  - IMAP : TCP 143
+
 ### SMTP
 #### Install
 ```
