@@ -40,9 +40,9 @@
 
 ## Mail Server
 ### Port List
-  - SMTP : TCP 25
-  - POP3 : TCP 110
-  - IMAP : TCP 143
+  - SMTP : TCP 25, 465(SSL) or 587(SSL)
+  - POP3 : TCP 110, 995(SSL)
+  - IMAP : TCP 143, 993(SSL)
 
 ### SMTP
 #### Install
