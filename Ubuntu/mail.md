@@ -146,3 +146,13 @@ $ apt-get install dovecot
   ```
 
 ## Trouble Shooting
+### smtpd: connect from unknown[unknown]
+- /etc/postfix/main.cf
+  append 
+  ```
+  smtpd_client_restrictions =
+        permit_mynetworks,
+        reject_unauth_pipelining,
+        reject_unknown_client_hostname,
+        permit
+  ```
