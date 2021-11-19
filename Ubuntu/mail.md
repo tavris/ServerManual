@@ -58,7 +58,7 @@ $ apt-get install postfix
   myorigin = $mydomain
   mydestination = $myhostname, $mydomain, localhost.$mydomain, localhost
 
-  mtpd_tls_cert_file = {SSL_CERT_FILE}
+  smtpd_tls_cert_file = {SSL_CERT_FILE}
   smtpd_tls_key_file = {SSL_KEY_FILE}
 
   # Mail to be forwarded when email does not exist.
