@@ -136,6 +136,9 @@ $ apt-get install dovecot
   }
   ```
 
+### Using SQL
+
+
 ## Testing 
 
 ## Using
@@ -156,3 +159,6 @@ $ apt-get install dovecot
         reject_unknown_client_hostname,
         permit
   ```
+  
+## Refer
+1. [PostfixCompleteVirtualMailSystemHowto](https://help.ubuntu.com/community/PostfixCompleteVirtualMailSystemHowto#Setting_MySQL_Backend) - Ubuntu Community
