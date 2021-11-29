@@ -163,3 +163,5 @@ $ apt-get install dovecot
 ## Refer
 1. [PostfixCompleteVirtualMailSystemHowto](https://help.ubuntu.com/community/PostfixCompleteVirtualMailSystemHowto#Setting_MySQL_Backend) - Ubuntu Community
 2. [Postfix](https://help.ubuntu.com/community/Postfix) - Ubuntu Community
+3. [Mail Server](https://help.ubuntu.com/community/MailServer) - Ubuntu Community
+4. [How to work Mail Server](https://noviceany.tistory.com/58)
