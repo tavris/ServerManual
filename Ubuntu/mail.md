@@ -1,6 +1,6 @@
 # Postfix & Dovecot mail server
 ## Environment
-- OS : Linux 18.04.5 LTS
+- OS : Linux (Ubuntu 18.04.5 LTS, 22.04.1 LTS)
 
 ## DNS Setting
 ### Record Setting
