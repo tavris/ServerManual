@@ -176,8 +176,22 @@ $ apt-get install dovecot
     FOREIGN KEY (`domainIdx`) REFERENCES virtual_domains(`idx`) ON DELETE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   ```
+- Virtual Aliases Table
+  ```
+  CREATE TABLE `virtual_aliases` (
+    `idx` INT NOT NULL AUTO_INCREMENT,
+    `domainIdx` INT NOT NULL,
+    `usrIdx` INT NOT NULL,
+    `source` VARCHAR(255) NOT NULL,
+    `destination` VARCHAR(255) NOT NULL,
+    `isDel` ENUM('Y', 'N') DEFAULT 'N' NOT NULL,
+    PRIMARY KEY (`idx`),
+    FOREIGN KEY (`domainIdx`) REFERENCES virtual_domains(`idx`) ON DELETE CASCADE,
+    FOREIGN KEY (`usrIdx`) REFERENCES virtual_users(`idx`) ON DELETE CASCADE
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  ```
 ### Postfix
-- Virtual Domain Script -> 'mysql-virtual-mailbox-domains.cf'
+- Virtual Domain Script -> `mysql-virtual-mailbox-domains.cf`
   ```
   user = {SQL_USER_ID}
   password = {SQL_USER_PWD}
@@ -199,11 +213,23 @@ $ apt-get install dovecot
   password = {SQL_USER_PWD}
   hosts = {SQL SERVER IP or 127.0.0.1}
   dbname = {Mail Server Database Name or mail_server}
-  query = SELECT destination FROM virtual_aliases WHERE source='%s'
+  query = SELECT destination FROM virtual_aliases WHERE source = '%s' AND isDel = 'N'
   ```
 
-## Testing 
-
+## Testing
+### SQL
+- Virtual Domain
+  ```
+  postmap -q {TEST_DOMAIN} mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
+  ```
+- Virtual User
+  ```
+  postmap -q {TEST_USER} mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
+  ```
+- Virtual Alias
+  ```
+  postmap -q {TEST_USER} mysql:/etc/postfix/mysql-virtual-alias-maps.cf
+  ```
 ## Using
 ### Add Email User
 - /etc/dovecot/users
