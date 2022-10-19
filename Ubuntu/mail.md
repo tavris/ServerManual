@@ -254,3 +254,5 @@ $ apt-get install dovecot
 2. [Postfix](https://help.ubuntu.com/community/Postfix) - Ubuntu Community
 3. [Mail Server](https://help.ubuntu.com/community/MailServer) - Ubuntu Community
 4. [How to work Mail Server](https://noviceany.tistory.com/58)
+5. [yiworkdisk](https://yiworkdisk.netlify.app/ko/linux/install_postfix.html)
+6. [퍼니오](https://www.fun25.co.kr/blog/dovecot-postfix-mysql-mail-server)
