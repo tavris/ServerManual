@@ -64,6 +64,22 @@ $ apt-get install postfix
   # Mail to be forwarded when email does not exist.
   luser_relay = {email}
   ```
+- /etc/postfix/master.cf
+  ```
+  submission inet n       -       n       -       -       smtpd
+    -o syslog_name=postfix/submission
+    -o smtpd_tls_security_level=encrypt
+    -o smtpd_sasl_auth_enable=yes
+  #  -o smtpd_tls_auth_only=yes
+  #  -o smtpd_reject_unlisted_recipient=no
+  #  -o smtpd_client_restrictions=$mua_client_restrictions
+  #  -o smtpd_helo_restrictions=$mua_helo_restrictions
+  #  -o smtpd_sender_restrictions=$mua_sender_restrictions
+    -o smtpd_recipient_restrictions=permit_sasl_authenticated,reject
+  #  -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
+    -o milter_macro_daemon_name=ORIGINATING
+  # Choose one: enable smtps for loopback clients only, or for any client.
+  ```
 
 ### POP3, IMAP
 #### Install
@@ -136,8 +152,55 @@ $ apt-get install dovecot
   }
   ```
 
-### Using SQL
-
+## Using SQL for Virtual
+### SQL
+- Virtual Domains Table
+  ```
+  CREATE TABLE `virtual_domains` (
+    `idx` INT NOT NULL AUTO_INCREMENT,
+    `domain` VARCHAR(255) NOT NULL,
+    `isDel` ENUM('Y', 'N') DEFAULT 'N' NOT NULL,
+    PRIMARY KEY (`idx`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  ```
+- Virtual User Table
+  ```
+  CREATE TABLE `virtual_users` (
+    `idx` INT NOT NULL AUTO_INCREMENT,
+    `domainIdx` INT NOT NULL,
+    `usrEmail` VARCHAR(255) NOT NULL,
+    `passwd` VARCHAR(255) NOT NULL,
+    `isDel` ENUM('Y', 'N') DEFAULT 'N' NOT NULL,
+    PRIMARY KEY (`idx`),
+    UNIQUE KEY `uni_user_email` (`usrEmail`),
+    FOREIGN KEY (`domainIdx`) REFERENCES virtual_domains(`idx`) ON DELETE CASCADE
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  ```
+### Postfix
+- Virtual Domain Script -> 'mysql-virtual-mailbox-domains.cf'
+  ```
+  user = {SQL_USER_ID}
+  password = {SQL_USER_PWD}
+  hosts = {SQL SERVER IP or 127.0.0.1}
+  dbname = {Mail Server Database Name or mail_server}
+  query = SELECT 1 FROM virtual_domains WHERE domain = '%s' AND isDel='N'
+  ```
+- Virtual User Script -> `mysql-virtual-mailbox-maps.cf`
+  ```
+  user = {SQL_USER_ID}
+  password = {SQL_USER_PWD}
+  hosts = {SQL SERVER IP or 127.0.0.1}
+  dbname = {Mail Server Database Name or mail_server}
+  query = SELECT 1 FROM virtual_users WHERE usrEmail = '%s' AND isDel = 'N'
+  ```
+- Virtual Alias Script -> `mysql-virtual-alias-maps.cf`
+  ```
+  user = {SQL_USER_ID}
+  password = {SQL_USER_PWD}
+  hosts = {SQL SERVER IP or 127.0.0.1}
+  dbname = {Mail Server Database Name or mail_server}
+  query = SELECT destination FROM virtual_aliases WHERE source='%s'
+  ```
 
 ## Testing 
 
