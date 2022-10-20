@@ -1,0 +1,5 @@
+user = {SQL_USER_ID}
+password = {SQL_USER_PWD}
+hosts = {SQL_SERVER_IP or 127.0.0.1}{:PORT}
+dbname = {SQL_DATABASE_NAME or mail_server}
+query = SELECT 1 FROM virtual_domains WHERE domain = '%s' AND isDel='N'
