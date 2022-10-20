@@ -150,7 +150,7 @@ $ apt-get install postfix postfix-mysql
   dbname = {Mail Server Database Name or mail_server}
   query = SELECT destination FROM virtual_aliases WHERE source = '%s' AND isDel = 'N'
   ```
-- /etc/postfix/main.cf
+- [/etc/postfix/main.cf](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/main.cf)
   ```
   mydomain = {domain}
   myhostname = mail.{domain}
@@ -164,7 +164,7 @@ $ apt-get install postfix postfix-mysql
   luser_relay = {email}
   ```
   
-- /etc/postfix/master.cf
+- [/etc/postfix/master.cf](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/master.cf)
   ```
   submission inet n       -       n       -       -       smtpd
     -o syslog_name=postfix/submission
