@@ -180,11 +180,12 @@ $ apt-get install postfix postfix-mysql
   # Choose one: enable smtps for loopback clients only, or for any client.
   ```
   
-### POP3, IMAP
+## POP3, IMAP
+### Using SQL for Virtual
 #### Install
 ```
 $ su -
-$ apt-get install dovecot
+$ apt-get install dovecot dovecot-imapd dovecot-lmtpd dovecot-mysql
 ```
 #### Configure
 - /etc/dovecot/conf.d/10-auth.conf
@@ -199,9 +200,9 @@ $ apt-get install dovecot
   #!include auth-master.conf.ext
 
   #!include auth-system.conf.ext
-  #!include auth-sql.conf.ext
+  !include auth-sql.conf.ext
   #!include auth-ldap.conf.ext
-  !include auth-passwdfile.conf.ext
+  #!include auth-passwdfile.conf.ext
   #!include auth-checkpassword.conf.ext
   #!include auth-vpopmail.conf.ext
   #!include auth-static.conf.ext
@@ -209,7 +210,11 @@ $ apt-get install dovecot
 
 - /etc/dovecot/conf.d/10-mail.conf
   ```
-  mail_location = maildir:/var/mail/%u/
+  # %u - username
+  # %n - user part in user@domain, same as %u if there's no domain
+  # %d - domain part in user@domain, empty if there's no domain
+  # %h - home directory
+  mail_location = maildir:/var/mail/%d/%n
 
   namespace inbox {
     inbox = yes
@@ -220,12 +225,43 @@ $ apt-get install dovecot
 
 - /etc/dovecot/conf.d/10-master.conf
   ```
+  service imap-login {
+    inet_listener imap {
+      port = 143
+    }
+    inet_listener imaps {
+      port = 993
+      ssl = yes
+    }
+    #service_count = 1
+    #process_min_avail = 0
+    #vsz_limit = $default_vsz_limit
+  }
+  
   service lmtp {
     unix_listener /var/spool/postfix/private/dovecot-lmtp {
       mode = 0600
       user = postfix
       group = postfix
     }
+  }
+  
+  service auth {
+    unix_listener auth-userdb {
+      mode = 0666
+      user = root
+      #group =
+    }
+
+    # Postfix smtp-auth
+    unix_listener /var/spool/postfix/private/auth {
+      mode = 0666
+      user = postfix
+      group = postfix
+    }
+
+    #user = $default_internal_user
+    user = dovecot
   }
   ```
 
@@ -283,7 +319,18 @@ $ apt-get install dovecot
         reject_unknown_client_hostname,
         permit
   ```
-  
+### SHA512-CRYPT not match
+Change `SHA512-CRYPT` -> `SHA512`
+In MySQL Create function.
+```
+CREATE FUNCTION `dovecotSHA512Pwd`(PLAIN VARCHAR(255)) RETURNS VARCHAR(512)
+BEGIN
+	DECLARE RETURN_VALUE VARCHAR(512);
+	SET RETURN_VALUE = TO_BASE64(UNHEX(SHA2('PLAIN', 512)));
+	RETURN RETURN_VALUE;
+END
+```
+
 ## Refer
 1. [PostfixCompleteVirtualMailSystemHowto](https://help.ubuntu.com/community/PostfixCompleteVirtualMailSystemHowto#Setting_MySQL_Backend) - Ubuntu Community
 2. [Postfix](https://help.ubuntu.com/community/Postfix) - Ubuntu Community
