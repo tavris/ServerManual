@@ -88,7 +88,7 @@ $ apt-get install postfix
 $ su -
 $ apt-get install postfix postfix-mysql
 ```
-#### Configure for SQL
+#### Configure for SQL ([SQL-File](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/mysql-virtual-table.sql))
 - Virtual Domains Table
   ```
   CREATE TABLE `virtual_domains` (
