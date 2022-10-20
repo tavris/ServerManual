@@ -126,28 +126,28 @@ $ apt-get install postfix postfix-mysql
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   ```
 #### Configure for postfix
-- Virtual Domain Script -> mysql-virtual-mailbox-domains.cf
+- Virtual Domain Script -> [mysql-virtual-mailbox-domains.cf](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/mysql-virtual-mailbox-domains.cf)
   ```
   user = {SQL_USER_ID}
   password = {SQL_USER_PWD}
-  hosts = {SQL SERVER IP or 127.0.0.1}
-  dbname = {Mail Server Database Name or mail_server}
+  hosts = {SQL_SERVER_IP or 127.0.0.1}{:PORT}
+  dbname = {SQL_DATABASE_NAME or mail_server}
   query = SELECT 1 FROM virtual_domains WHERE domain = '%s' AND isDel='N'
   ```
-- Virtual User Script -> mysql-virtual-mailbox-maps.cf
+- Virtual User Script -> [mysql-virtual-mailbox-maps.cf](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/mysql-virtual-mailbox-maps.cf)
   ```
   user = {SQL_USER_ID}
   password = {SQL_USER_PWD}
-  hosts = {SQL SERVER IP or 127.0.0.1}
-  dbname = {Mail Server Database Name or mail_server}
+  hosts = {SQL_SERVER_IP or 127.0.0.1}{:PORT}
+  dbname = {SQL_DATABASE_NAME or mail_server}
   query = SELECT 1 FROM virtual_users WHERE usrEmail = '%s' AND isDel = 'N'
   ```
-- Virtual Alias Script -> mysql-virtual-alias-maps.cf
+- Virtual Alias Script -> [mysql-virtual-alias-maps.cf](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/mysql-virtual-alias-maps.cf)
   ```
   user = {SQL_USER_ID}
   password = {SQL_USER_PWD}
-  hosts = {SQL SERVER IP or 127.0.0.1}
-  dbname = {Mail Server Database Name or mail_server}
+  hosts = {SQL_SERVER_IP or 127.0.0.1}{:PORT}
+  dbname = {SQL_DATABASE_NAME or mail_server}
   query = SELECT destination FROM virtual_aliases WHERE source = '%s' AND isDel = 'N'
   ```
 - [/etc/postfix/main.cf](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/main.cf)
