@@ -52,36 +52,6 @@ $ su -
 $ apt-get install postfix
 ```
 
-#### Configure
-- /etc/postfix/main.cf
-  ```
-  mydomain = {domain}
-  myhostname = mail.{domain}
-  myorigin = $mydomain
-  mydestination = $myhostname, $mydomain, localhost.$mydomain, localhost
-
-  smtpd_tls_cert_file = {SSL_CERT_FILE}
-  smtpd_tls_key_file = {SSL_KEY_FILE}
-
-  # Mail to be forwarded when email does not exist.
-  luser_relay = {email}
-  ```
-- /etc/postfix/master.cf
-  ```
-  submission inet n       -       n       -       -       smtpd
-    -o syslog_name=postfix/submission
-    -o smtpd_tls_security_level=encrypt
-    -o smtpd_sasl_auth_enable=yes
-  #  -o smtpd_tls_auth_only=yes
-  #  -o smtpd_reject_unlisted_recipient=no
-  #  -o smtpd_client_restrictions=$mua_client_restrictions
-  #  -o smtpd_helo_restrictions=$mua_helo_restrictions
-  #  -o smtpd_sender_restrictions=$mua_sender_restrictions
-    -o smtpd_recipient_restrictions=permit_sasl_authenticated,reject
-  #  -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
-    -o milter_macro_daemon_name=ORIGINATING
-  # Choose one: enable smtps for loopback clients only, or for any client.
-  ```
 ### Using SQL for Virtual
 #### Install
 ```
@@ -150,22 +120,51 @@ $ apt-get install postfix postfix-mysql
   dbname = {SQL_DATABASE_NAME or mail_server}
   query = SELECT destination FROM virtual_aliases WHERE source = '%s' AND isDel = 'N'
   ```
-- [/etc/postfix/main.cf](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/main.cf)
+- /etc/postfix/main.cf [Default_Template](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/main.cf)
   ```
+  smtpd_banner = $ESMTP $mail_name
+  
+  # TLS parameters
+  ## SMTPD
+  smtpd_use_tls = yes
+  smtpd_tls_cert_file = {SSL_CERT_FILE_PATH}
+  smtpd_tls_key_file = {SSL_KEY_FILE_PATH}
+  smtpd_tls_received_header = yes
+  smtpd_tls_session_cache_timeout = 3600s
+  smtpd_tls_security_level = may
+
+  ## SMTP
+  smtp_use_tls = yes
+  smtp_tls_CApath = {SSL_CA_FILE_PATH}
+  smtp_tls_security_level = may
+  smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+  ## SMTP-SASL
+  smtpd_sasl_type = dovecot
+  smtpd_sasl_path = private/auth
+  smtpd_sasl_auth_enable = yes
+  smtpd_recipient_restrictions = permit_sasl_authenticated permit_mynetworks reject_unauth_destination
+  # smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+  
   mydomain = {domain}
   myhostname = mail.{domain}
   myorigin = $mydomain
   mydestination = $myhostname, $mydomain, localhost.$mydomain, localhost
-
-  smtpd_tls_cert_file = {SSL_CERT_FILE}
-  smtpd_tls_key_file = {SSL_KEY_FILE}
-
-  # Mail to be forwarded when email does not exist.
-  luser_relay = {email}
-  ```
   
-- [/etc/postfix/master.cf](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/master.cf)
+  # Mailbox
+  home_mailbox = /var/mail/
+  mailbox_size_limit = 0
+  
+  ## Virtual Mail
+  virtual_transport = lmtp:unix:private/dovecot-lmtp
+  virtual_mailbox_domains = mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
+  virtual_mailbox_maps = mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
+  virtual_alias_maps = mysql:/etc/postfix/mysql-virtual-alias-maps.cf
   ```
+- /etc/postfix/master.cf [Default_Template](https://github.com/tavris/ServerManual/blob/master/Ubuntu/samples/postfix/master.cf)
+  ```
+  smtp      inet  n       -       n       -       -       smtpd
+  
   submission inet n       -       n       -       -       smtpd
     -o syslog_name=postfix/submission
     -o smtpd_tls_security_level=encrypt
@@ -180,7 +179,7 @@ $ apt-get install postfix postfix-mysql
     -o milter_macro_daemon_name=ORIGINATING
   # Choose one: enable smtps for loopback clients only, or for any client.
   ```
-
+  
 ### POP3, IMAP
 #### Install
 ```
