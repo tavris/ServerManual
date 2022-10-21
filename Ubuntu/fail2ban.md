@@ -1,4 +1,7 @@
 # Fail2Ban
+### Environment
+- ![Generic badge](https://img.shields.io/badge/UbuntU-22.04_LTS_or_Above-green.svg)
+
 ## Install
 ```
 $ su -
