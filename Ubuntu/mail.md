@@ -1,6 +1,6 @@
 # Postfix & Dovecot mail server
-## Environment
-- OS : Linux (Ubuntu 18.04.5 LTS, 22.04.1 LTS)
+### Environment
+- ![Generic badge](https://img.shields.io/badge/UbuntU-18.04.5_LTS_or_Above-green.svg)
 
 ## Port List
   - SMTP : TCP 25, 465(SSL) or 587(SSL)
