@@ -267,23 +267,23 @@ $ apt-get install dovecot dovecot-imapd dovecot-lmtpd dovecot-mysql
 
 - /etc/dovecot/conf.d/10-ssl.conf
   ```
-  ssl = yes
+  ssl = required:q::
 
   ssl_cert = <{SSL_CERT_FILE}
   ssl_key = <{SSL_KEY_FILE}
   ssl_ca = <{SSL_CA_FILE}
   ```
 
-- /etc/dovecot/conf.d/auth-passwdfile.conf.ext
+- /etc/dovecot/conf.d/auth-sql.conf.ext
   ```
   passdb {
-    driver = passwd-file
-    args = scheme=PLAIN username_format=%u /etc/dovecot/users
+    driver = sql
+    args = /etc/dovecot/dovecot-sql.conf.ext
   }
 
   userdb {
-    driver = passwd-file
-    args = username_format=%u /etc/dovecot/users
+    driver = static
+    args = uid=vmail gid=vmail home=/var/mail/%d/%n
   }
   ```
 
