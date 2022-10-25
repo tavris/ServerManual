@@ -13,7 +13,7 @@
   - A NAME : mail.{domain}, VALUE : {Server IP}
   - Test<br>
     ```
-    $ nslookup mail.{domain}
+    $ nslookup mail.{DOMAIN}
       Server : {Server IP}
       Address: {Server IP}#{TagNum}
       
@@ -25,7 +25,7 @@
   - MX NAME : @, VALUE : mail.{domain}, Priority : {Number of Priority}
   - Test<br>
     ```
-    $ nslookup -type=mx {domain}
+    $ nslookup -type=mx {DOMAIN}
     Server : {Server IP}
     Address: {Server IP}#{TagNum}
     
@@ -35,12 +35,19 @@
   - Record Type : TXT, NAME : @, VALUE : v=spf1 ip4:{Server IP} -all
   - Test<br>
     ```
-    $ nslookup -type=txt {domain}
+    $ nslookup -type=txt {DOMAIN}
     Server : {Server IP}
     Address: {Server IP}#{TagNum}
     
     Non-authoritative answer:
-    {domain}  text = v=spf1 ip4:{Server IP} -all
+    {DOMAIN}  text = v=spf1 ip4:{Server IP} -all
+    ```
+- **DKIM Record**
+  - Record Type : TXT, NAME : {PREFIX}.\_domainkey.{DOMAIN}
+    VALUE = `DKIM Key Value`
+    ```
+    ## Example
+    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5iCQchVwQIUEry48m2RstfzC18sd28A94ZreIiq0pDH5on5+gkEi+vnoX124ZCiGrQ1ov6AJiJUvwcAft7suKpEMRVN983Uo29eQcxot9K/sf3UGczsr/4UhzqIfMSwGl4I3hDvb6QxqqD/rVeT3nLy6HaAqlq4gJw5LAQaHnHOxFwd4+jSMf+Xk8hHKZlOY3yorm5v0mHeEpgGTmtfl90SLbUeZF8ipJOH/4QOf7wYqHZQiJVnSL2Yp7MbZZguMYPpLc3XFDGsgcmNGFU1IAxsH+K38JEHloc2fI9iXGoOY8ae1RC5kWSbWEIkl1KptkSpogbAGqRyJYyJL6ycU5QIDAQAB"
     ```
 
 ## SMTP Server
@@ -309,6 +316,48 @@ smtpd_recipient_restrictions =
   check_policy_service unix:private/policyd-spf
 # SPF
 policyd-spf_time_limit = 3600
+```
+
+## DKIM (DomainKeys Identified Mail)
+#### Install
+```
+$ su -
+$ apt-get install opendkim opendkim-tools
+```
+#### Configure
+- /etc/opendkim.conf 
+```
+## Mode using 's' only check recive, 'sv'check send and recive.
+Mode		sv
+SendReports	yes
+
+#KeyFile	/etc/opendkim/keys/default.private    [#주석 처리, 사용하지 않음]
+KeyTable        /etc/opendkim/KeyTable    [#주석 제거]
+SigningTable  refile:/etc/opendkim/SigningTable    [#주석 제거]
+ExternalIgnoreList      refile:/etc/opendkim/TrustedHosts    [#주석 제거]
+InternalHosts   refile:/etc/opendkim/TrustedHosts    [#주석 제거]
+```
+- /etc/opendkim/TrustedHosts
+```
+127.0.0.1
+::1
+{DOMAIN}
+mail.{DOMAIN}
+```
+- /etc/opendkim/SigningTable
+```
+*@{DOMAIN} {PREFIX}._domainkey.{DOMAIN}
+```
+- /etc/opendkim/KeyTable
+```
+{PREFIX}._domainkey.{DOMAIN} DOMAIN:{PREFIX}:/etc/opendkim/keys/{DOMAIN}/{PREFIX}.private 
+```
+#### Build Key
+```
+$ su -
+$ opendkim-genkey -b 2048 -d {DOMAIN} -D /etc/opendkim/keys/{DOMAIN} -s {PREFIX} -v 
+$ chown opendkim:opendkim -R /etc/opendkim/keys/
+$ chmod 700 /etc/opendkim/keys
 ```
 
 ## Testing
