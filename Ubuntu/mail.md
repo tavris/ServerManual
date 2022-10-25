@@ -374,11 +374,31 @@ $ chmod 700 /etc/opendkim/keys
   ```
   postmap -q {TEST_USER} mysql:/etc/postfix/mysql-virtual-alias-maps.cf
   ```
+### DKIM
+* Using `opendkim-testkey` inside server.
+  1. `opendkim-testkey -d {DOMAIN} -s {PREFIX} -vvv`
+  2. Make sure it looks like the example data below. 
+    ```
+    opendkim-testkey: using default configfile /etc/opendkim.conf
+    opendkim-testkey: checking key '{PREFIX}._domainkey.{DOMAIN}'
+    opendkim-testkey: key not secure
+    opendkim-testkey: key OK
+    ```
+* Using WebSite [MXToolBox](https://mxtoolbox.com/SuperTool.aspx?action).
+  1. Click `DKIM Lookup` menu.
+  2. Enter the hostsname : {PREFIX}.\_domainkey.{DOMAIN}
+  
 ## Using
 ### Add Email User
 - /etc/dovecot/users
   ```
   {Id}:{Password}:{uid}:{gid}::::userdb_mail={Path}
+  ```
+### DKIM
+  ```
+  $ su -
+  $ systemctl start opendkim #→ Start Service.
+  $ systemctl enable opendkim #→ Registed autometic start.
   ```
 
 ## Trouble Shooting
@@ -403,6 +423,22 @@ BEGIN
 	RETURN RETURN_VALUE;
 END
 ```
+### DKIM
+#### If the DNS input size is exceeded
+When generating the key, you must use the default `RSA-1024` bit by excluding the `-b 2048` option.
+For the purpose of applying only the DKIM policy, issue a key as follows.
+```
+$ su -
+$ opendkim-genkey -d {DOMAIN} -D /etc/opendkim/keys -s {PREFIX} -v
+```
+#### Postfix: can't load key : No such file or directory
+Check `/etc/opendkim/KeyTable` Setting.
+
+#### Postfix: key data is not secure
+The public key and key do not match.
+
+#### Postfix: can't load key from : Permission denied
+It is caused by a permission problem in the path `/etc/opendkim/keys/`, `/keys` folder is set to `700` permission.
 
 ## Refer
 1. [PostfixCompleteVirtualMailSystemHowto](https://help.ubuntu.com/community/PostfixCompleteVirtualMailSystemHowto#Setting_MySQL_Backend) - Ubuntu Community
@@ -411,3 +447,4 @@ END
 4. [How to work Mail Server](https://noviceany.tistory.com/58)
 5. [yiworkdisk](https://yiworkdisk.netlify.app/ko/linux/install_postfix.html)
 6. [퍼니오](https://www.fun25.co.kr/blog/dovecot-postfix-mysql-mail-server)
+7. [Rocky Linux - 메일서버(Postfix) DKIM 정책 적용](https://foxydog.tistory.com/112)
