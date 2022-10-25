@@ -286,6 +286,30 @@ $ apt-get install dovecot dovecot-imapd dovecot-lmtpd dovecot-mysql
     args = uid=vmail gid=vmail home=/var/mail/%d/%n
   }
   ```
+  
+## SPF (Sender Policy Framework)
+#### Install
+```
+$ su -
+$ apt-get install postfix-policyd-spf-python
+```
+#### Configure
+- /etc/postfix/master.cf
+```
+...
+## Add the following content to the bottom of the file content.
+policyd-spf  unix  -       n       n       -       0       spawn
+  user=policyd-spf argv=/usr/local/bin/policyd-spf
+```
+- /etc/postfix/main.cf
+```
+## SMTP-SASL
+smtpd_recipient_restrictions =
+  ....
+  check_policy_service unix:private/policyd-spf
+# SPF
+policyd-spf_time_limit = 3600
+```
 
 ## Testing
 ### SQL
