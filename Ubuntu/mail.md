@@ -447,4 +447,5 @@ It is caused by a permission problem in the path `/etc/opendkim/keys/`, `/keys` 
 4. [How to work Mail Server](https://noviceany.tistory.com/58)
 5. [yiworkdisk](https://yiworkdisk.netlify.app/ko/linux/install_postfix.html)
 6. [퍼니오](https://www.fun25.co.kr/blog/dovecot-postfix-mysql-mail-server)
-7. [Rocky Linux - 메일서버(Postfix) DKIM 정책 적용](https://foxydog.tistory.com/112)
+7. [Rocky Linux - 메일서버 구축(Postfix, Dovecot, MariaDB And Roundcube)](https://foxydog.tistory.com/104)
+8. [Rocky Linux - 메일서버(Postfix) DKIM 정책 적용](https://foxydog.tistory.com/112)
