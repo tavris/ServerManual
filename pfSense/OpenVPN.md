@@ -1,6 +1,8 @@
 # VPN - OpenVPN
-## Environment
-- OS : pfSense 2.5.x
+### Environment
+- OS
+  - ![Generic badge](https://img.shields.io/badge/pfSense_plus-22.05-green.svg)
+  - ![Generic badge](https://img.shields.io/badge/pfSense-2.5.x-green.svg)
 
 ## Create CAs
 - Menu : System -> Cert. Manager -> CAs
