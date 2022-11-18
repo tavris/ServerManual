@@ -36,3 +36,9 @@ apt-get install gitlab-ce
   $ su -
   $ gitlab-ctl reconfigure
   ```
+* Check GitLab service
+  ```
+  $ su -
+  $ sudo gitlab-ctl status
+  ```
+## Troubleshooting
